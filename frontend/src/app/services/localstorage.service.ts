@@ -15,10 +15,16 @@ export class LocalstorageService {
     }
   }
  
-   getItem(key: string) {
+  getItem(key: string) {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem(key);
     }
     return null;
-   }
+  }
+
+  removeItem(key: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(key);
+    }
+  }
 }

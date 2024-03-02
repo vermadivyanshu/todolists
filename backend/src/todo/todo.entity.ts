@@ -13,6 +13,9 @@ export class Todo {
   @Column({nullable: false, type: 'text'})
   detail: string;
 
+  @Column({default: false})
+  isDone: boolean;
+
   @ManyToOne(() => List, list => list.todos)
   @JoinColumn()
   list: List;

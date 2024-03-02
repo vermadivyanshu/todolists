@@ -1,9 +1,11 @@
 <mat-drawer-container class="home-container">
   <mat-drawer mode="side" opened class="home-drawer">
-    Drawer content
     <mat-list>
+      <div mat-subheader>Lists</div>
       <mat-list-item *ngFor="let list of lists">
-        <button mat-button (click)="onListItemClick(list)" >{{ list.name }}</button>
+        <button mat-button (click)="onListItemClick(list)" >
+          <mat-icon>checklist</mat-icon>{{ list.name }}
+        </button>
       </mat-list-item>
       <mat-list-item>
         <app-create-list (newItemEvent)="addItem($event)"></app-create-list>
@@ -11,7 +13,6 @@
     </mat-list>
   </mat-drawer>
   <mat-drawer-content class="home-content">
-    <router-outlet>
-    </router-outlet>
+    <app-list [listId]="selectedListId" (editListEvent)="onEditList($event)" (removeListEvent)="onRemoveList($event)" *ngIf="selectedListId"></app-list>
   </mat-drawer-content>
 </mat-drawer-container>

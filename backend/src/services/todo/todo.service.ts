@@ -63,9 +63,9 @@ export class TodoService {
     return todo;
   }
 
-  async updateTodo(userId: number, listId: number, todo: {id: number, title: string, detail: string }): Promise<Todo> {
+  async updateTodo(userId: number, listId: number, todo: Partial<Todo>): Promise<Todo> {
     const todoToUpdate = await this.findOneTodo(userId, listId, todo.id);
-    await this.todoRepository.update({id: todoToUpdate.id}, { title: todo.title, detail: todo.detail});
+    await this.todoRepository.update({id: todoToUpdate.id}, { title: todo.title, detail: todo.detail, isDone: todo.isDone });
     return this.todoRepository.findOne({ where: { id: todoToUpdate.id }})
   }
 

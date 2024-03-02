@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
 import { TodoService } from '../services/todo.service';
-import { ListWithTodos, Todo } from '../services/todo.types';
+import { List, ListWithTodos, Todo } from '../services/todo.types';
 import { tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
@@ -10,18 +10,21 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { TodoDialogComponent } from '../todo-dialog/todo-dialog.component';
 import { ListFormComponent } from '../list-form/list-form.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatListModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnChanges {
+  @Input() listId: number | undefined;
+  @Output() removeListEvent = new EventEmitter<ListWithTodos>();
+  @Output() editListEvent = new EventEmitter<List>();
   list: ListWithTodos;
-  listId: number | undefined;
-  selectedTodos: Todo[]
+  selectedTodos: Todo[];
 
   constructor(private todoService: TodoService,
     private route: ActivatedRoute,
@@ -31,21 +34,15 @@ export class ListComponent implements OnInit {
     this.selectedTodos = [];
   }
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const listId = params.get('listId');
-      
-      if(!listId) {
-        return;
-      }
-      this.listId = +listId;
-      this.todoService.getList(+listId).subscribe(result => {
+  ngOnChanges(changes: SimpleChanges): void {
+    const {listId: { currentValue = null } = {}} = changes;
+    if(currentValue) {
+      this.todoService.getList(currentValue).subscribe(result => {
         if(result) {
           this.list = result;
         }
       });
-
-    });
+    }
   }
 
   onClickAddTodo() {
@@ -91,7 +88,8 @@ export class ListComponent implements OnInit {
         title: 'Edit Todo',
         todo: {
           title: oldTodo.title,
-          detail: oldTodo.detail
+          detail: oldTodo.detail,
+          isDone: oldTodo.isDone
         },
         okLabel: 'Save',
         cancelLabel: 'Cancel'
@@ -100,8 +98,8 @@ export class ListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(todo => {
       if(todo && this.listId) {
-        this.todoService.updateTodo(oldTodo.id, todo).pipe(
-          tap((updatedTodo) => {
+        this.todoService.updateTodo(oldTodo.id, {...todo, listId: this.listId }).subscribe(
+          (updatedTodo) => {
             if(updatedTodo) {
               this.list.todos = (this.list.todos || []).map(todo => {
                 if(todo.id === oldTodo.id) {
@@ -109,21 +107,22 @@ export class ListComponent implements OnInit {
                 }
                 return todo;
               })
+              this.selectedTodos = [];
             }
-          })
-        ).subscribe();
+          }
+        );
       }
     });
   }
 
-  onDeleteList() {
+  onRemoveList() {
     if(!this.list.id) {
       return;
     }
 
     this.todoService.deleteList(this.list.id).subscribe(
       () => {
-        this.router.navigate(['home']);
+        this.removeListEvent.emit(this.list);
       }
     );
   }
@@ -132,6 +131,7 @@ export class ListComponent implements OnInit {
     if(!this.list.id) {
       return;
     }
+
     const dialogRef = this.dialog.open(ListFormComponent, {
       data: {
         title: 'Update List',
@@ -140,15 +140,33 @@ export class ListComponent implements OnInit {
         okLabel: 'Update'
       }
     })
+
     dialogRef.afterClosed().subscribe(updatedList => {
       if(updatedList && updatedList.name && this.list.id) {
-        this.todoService.updateList(this.list.id, updatedList).subscribe(() => {
+        this.todoService.updateList(this.list.id, updatedList).subscribe((response) => {
           this.list.name = updatedList.name;
-          this.router.navigate(['home', 'list', this.list.id]);
+          this.editListEvent.emit(response);
         });
       }
     });
+  }
 
+  onClickToggle() {
+    if(!this.list.id) {
+      return;
+    }
+    const todo = this.selectedTodos[0];
+    this.todoService.updateTodo(todo.id, {...todo, isDone: !todo.isDone, listId: this.list.id}).subscribe(
+      (result) => {
+        if(!result) {
+          return;
+        }
+        this.list.todos = (this.list.todos || []).map(todoItem => {
+          return todo.id === todoItem.id ? result : todoItem;
+        });
+        this.selectedTodos = [];
+      }
+    )
   }
 
   onSelectionChange(event: any) {

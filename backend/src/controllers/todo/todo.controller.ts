@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TodoService } from 'src/services/todo/todo.service';
 import { Todo } from 'src/todo/todo.entity';
@@ -15,10 +15,11 @@ export class TodoController {
     return this.todoService.createTodo(request.user.userId, todo.listId, todo)
   }
 
-  @Patch(':id')
-  async updateTodo(@Request() request, @Param('id')id: number, @Body()todo: TodoDto): Promise<Todo> {
-    return this.todoService.updateTodo(request.user.userId, todo.listId, {
-      id, title: todo.title, detail: todo.detail
+  @Put(':id')
+  async updateTodo(@Request() request, @Param('id')id: number, @Body()todo: TodoDto & Partial<Todo>): Promise<Todo> {
+    const {listId, ...restOfTodo } = todo; 
+    return this.todoService.updateTodo(request.user.userId, listId, {
+      id, ...restOfTodo
     })
   }
 

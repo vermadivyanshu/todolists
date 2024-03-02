@@ -13,6 +13,7 @@ export interface Todo {
   id: number;
   title: string;
   detail: string;
+  isDone: boolean;
 }
 
 export interface ListDto {
@@ -28,4 +29,5 @@ export interface Todo {
   id: number;
   title: string;
   name: string;
+  isDone: boolean;
 }

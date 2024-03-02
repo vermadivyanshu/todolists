@@ -13,9 +13,6 @@ export class TodoService {
 
   getAllList(): Observable<List[]> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of([]);
-    }
     return this.http.get<List[]>('/api/lists', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -25,9 +22,6 @@ export class TodoService {
 
   getList(listId: number): Observable<ListWithTodos | undefined> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.get<ListWithTodos>(`/api/lists/${listId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -37,9 +31,6 @@ export class TodoService {
 
   createList(list: ListDto): Observable<List | undefined> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.post<List>('/api/lists', list, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -49,9 +40,6 @@ export class TodoService {
 
   updateList(id: number, list: ListDto): Observable<List | undefined> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.patch<List>(`/api/lists/${id}`, list, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -61,9 +49,6 @@ export class TodoService {
 
   deleteList(id: number): Observable<any> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.delete<Todo>(`/api/lists/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -73,9 +58,6 @@ export class TodoService {
 
   createTodo(todo: TodoDto): Observable<Todo | undefined>  {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.post<Todo>('/api/todos', todo, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -83,12 +65,9 @@ export class TodoService {
     })
   }
 
-  updateTodo(id: number, todo: TodoDto): Observable<Todo | undefined> {
+  updateTodo(id: number, todo: TodoDto & Partial<Todo>): Observable<Todo | undefined> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
-    return this.http.patch<Todo>(`/api/todos/${id}`, todo, {
+    return this.http.put<Todo>(`/api/todos/${id}`, todo, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -97,9 +76,6 @@ export class TodoService {
 
   deleteTodo(id: number, listId: number): Observable<any> {
     const token = this.localStorageService.getItem('todo-token');
-    if(!token) {
-      return of();
-    }
     return this.http.delete<Todo>(`/api/todos/${listId}/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`

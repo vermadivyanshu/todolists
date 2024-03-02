@@ -1,8 +1,12 @@
 .list-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .list-header .action-container {
   display: flex;
   justify-content: space-between;
+}
+.strikethrough {
+  text-decoration: line-through;
 }

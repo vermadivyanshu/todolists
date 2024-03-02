@@ -7,16 +7,15 @@
       <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button mat-button color="warn" (click)="onDeleteList()">
+    <button mat-button color="warn" (click)="onRemoveList()">
       <mat-icon>delete</mat-icon>
       Remove
     </button>
   </div>
 
 </div>
-<p>Todos: {{list.todos ? list.todos.length : 0}}</p>
 <div class="list-actions-container">
-  <button mat-button color="primary" [disabled]="!selectedTodos.length">
+  <button mat-button color="primary" [disabled]="!selectedTodos.length" (click)="onClickToggle()">
     Toggle
   </button>
 
@@ -39,10 +38,13 @@
 
 <div *ngIf="list.todos && list.todos.length">
   <mat-selection-list #todos [multiple]="false" (selectionChange)="onSelectionChange($event)">
-    <mat-list-option *ngFor="let todo of list.todos" [value]="todo">
-      <span matListItemTitle>{{todo.title}}</span>
-      <span matListItemLine>{{todo.detail}}</span>
-    </mat-list-option>
+    <ng-container *ngFor="let todo of list.todos">
+      <mat-list-option [value]="todo">
+        <span matListItemTitle [ngClass]="{'strikethrough': todo.isDone }">{{todo.title}}</span>
+        <span matListItemLine>{{todo.detail}}</span>
+      </mat-list-option>
+      <mat-divider></mat-divider>
+    </ng-container>
   </mat-selection-list>
 </div>
 
