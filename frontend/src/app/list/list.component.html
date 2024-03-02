@@ -1,0 +1,49 @@
+<div class="list-header">
+  <div class="list-heading">
+    <h2>{{list.name}}</h2>
+  </div>
+  <div class="list-actions">
+    <button mat-button color="accent"  (click)="onEditList()">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+    <button mat-button color="warn" (click)="onDeleteList()">
+      <mat-icon>delete</mat-icon>
+      Remove
+    </button>
+  </div>
+
+</div>
+<p>Todos: {{list.todos ? list.todos.length : 0}}</p>
+<div class="list-actions-container">
+  <button mat-button color="primary" [disabled]="!selectedTodos.length">
+    Toggle
+  </button>
+
+  <button mat-button color="primary" (click)="onClickAddTodo()">
+    <mat-icon>add</mat-icon>
+    Add
+  </button>
+
+  <button mat-button color="accent" [disabled]="!selectedTodos.length" (click)="onClickUpdateTodo()">
+    <mat-icon>edit</mat-icon>
+    Edit
+  </button>
+
+  <button mat-button color="warn" [disabled]="!selectedTodos.length" (click)="onClickRemoveTodo()">
+    <mat-icon>delete</mat-icon>
+    Remove
+  </button>
+
+</div>
+
+<div *ngIf="list.todos && list.todos.length">
+  <mat-selection-list #todos [multiple]="false" (selectionChange)="onSelectionChange($event)">
+    <mat-list-option *ngFor="let todo of list.todos" [value]="todo">
+      <span matListItemTitle>{{todo.title}}</span>
+      <span matListItemLine>{{todo.detail}}</span>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+

@@ -1,0 +1,9 @@
+.home-container {
+  height: 100%;
+}
+.home-container .home-drawer {
+  padding: 2rem;
+}
+.home-container .home-content {
+  padding: 2rem;
+}

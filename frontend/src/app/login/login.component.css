@@ -1,0 +1,15 @@
+.app-login-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app-login-container #login-card {
+  min-height: 40%;
+  width: 40%;
+}
+.app-login-container .login-form {
+  display: flex;
+  flex-direction: column;
+}
