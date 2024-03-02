@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,18 +26,29 @@ export interface TodoDialogData {
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
+    ReactiveFormsModule
   ],
   templateUrl: './todo-dialog.component.html',
   styleUrl: './todo-dialog.component.css'
 })
 export class TodoDialogComponent {
+  todoForm: FormGroup
   constructor(
     public dialogRef: MatDialogRef<TodoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TodoDialogData
-  ) {}
+  ) {
+    this.todoForm = new FormGroup({
+      title: new FormControl(this.data.todo.title, [Validators.required, Validators.minLength(1)]),
+      detail: new FormControl(this.data.todo.detail, [Validators.minLength(1)])
+    });
+  }
 
   onCancelClick(): void {
     this.dialogRef.close();
+  }
+
+  getTodo() {
+    return  {...this.data.todo, ...this.todoForm.value};
   }
 
 }

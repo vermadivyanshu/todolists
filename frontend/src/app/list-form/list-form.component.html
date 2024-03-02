@@ -1,11 +1,13 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="data.name">
-  </mat-form-field>
+  <form [formGroup]="listForm">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">{{data.cancelLabel}}</button>
-  <button mat-button [mat-dialog-close]="{name: data.name}" [disabled]="!data.name" cdkFocusInitial>{{data.okLabel}}</button>
+  <button mat-button [mat-dialog-close]="getList()" [disabled]="!listForm.valid" cdkFocusInitial>{{data.okLabel}}</button>
 </mat-dialog-actions>

@@ -1,15 +1,18 @@
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="todo-dialog-content">
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input matInput [(ngModel)]="data.todo.title">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Detail</mat-label>
-    <input matInput [(ngModel)]="data.todo.detail">
-  </mat-form-field>
+  <form  [formGroup]="todoForm" class="todo-form">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Detail</mat-label>
+      <input matInput formControlName="detail" >
+    </mat-form-field>
+  </form>
+  
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">{{data.cancelLabel}}</button>
-  <button mat-button [mat-dialog-close]="data.todo" [disabled]="!data.todo.title || !data.todo.detail" cdkFocusInitial>{{data.okLabel}}</button>
+  <button mat-button [mat-dialog-close]="getTodo()" [disabled]="!todoForm.valid" cdkFocusInitial>{{data.okLabel}}</button>
 </mat-dialog-actions>
