@@ -13,7 +13,7 @@ import { typeOrmConfig } from './typeorm.config';
     UserModule,
     ListModule,
     TodoModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [AppService],
 })

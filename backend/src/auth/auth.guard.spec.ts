@@ -38,7 +38,9 @@ describe('AuthGuard', () => {
         }),
       } as any;
 
-      jest.spyOn(jwtService, 'verifyAsync').mockResolvedValueOnce({ userId: 1 });
+      jest
+        .spyOn(jwtService, 'verifyAsync')
+        .mockResolvedValueOnce({ userId: 1 });
 
       const result = await guard.canActivate(context);
       expect(result).toBe(true);
@@ -54,7 +56,9 @@ describe('AuthGuard', () => {
         }),
       } as any;
 
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should throw UnauthorizedException if token is invalid', async () => {
@@ -68,7 +72,9 @@ describe('AuthGuard', () => {
 
       jest.spyOn(jwtService, 'verifyAsync').mockRejectedValueOnce(new Error());
 
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

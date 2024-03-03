@@ -9,12 +9,14 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     moduleRef = await Test.createTestingModule({
-      providers: [{
-        provide: AuthService,
-        useValue: {
-          signIn: jest.fn()
-        }
-      }],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: {
+            signIn: jest.fn(),
+          },
+        },
+      ],
       controllers: [AuthController],
     }).compile();
 
@@ -25,16 +27,18 @@ describe('AuthController', () => {
   afterAll(() => moduleRef.close());
 
   it('should call authService.signIn', async () => {
-    await controller.signIn({username: 'user', password: 'pass'});
+    await controller.signIn({ username: 'user', password: 'pass' });
     expect(service.signIn).toHaveBeenCalledTimes(1);
     expect(service.signIn).toHaveBeenCalledWith('user', 'pass');
-  })
+  });
 
   it('should throw an error when signin fails', async () => {
     jest.spyOn(service, 'signIn').mockImplementation(async () => {
       throw new Error('failed');
     });
-    await expect(controller.signIn({username: 'user', password: 'pass'})).rejects.toThrow(Error);
+    await expect(
+      controller.signIn({ username: 'user', password: 'pass' }),
+    ).rejects.toThrow(Error);
     expect(service.signIn).toHaveBeenCalledTimes(1);
     expect(service.signIn).toHaveBeenCalledWith('user', 'pass');
   });

@@ -8,6 +8,6 @@ import { ListController } from 'src/controllers/list/list.controller';
 @Module({
   imports: [TypeOrmModule.forFeature([List, Todo])],
   providers: [TodoService],
-  controllers: [ListController]
+  controllers: [ListController],
 })
 export class ListModule {}

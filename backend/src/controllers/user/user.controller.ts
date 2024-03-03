@@ -7,12 +7,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body()user: Partial<User>): Promise<User> {
+  create(@Body() user: Partial<User>): Promise<User> {
     return this.userService.create(user);
   }
 
   @Get(':id')
-  findOne(@Param('id')id: number): Promise<User> {
+  findOne(@Param('id') id: number): Promise<User> {
     return this.userService.findOne(id);
   }
 }

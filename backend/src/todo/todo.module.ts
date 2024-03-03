@@ -8,6 +8,6 @@ import { List } from 'src/list/list.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Todo, List])],
   providers: [TodoService],
-  controllers: [TodoController]
+  controllers: [TodoController],
 })
 export class TodoModule {}

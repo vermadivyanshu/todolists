@@ -5,9 +5,8 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
   create(user: Partial<User>): Promise<User> {
@@ -15,10 +14,10 @@ export class UserService {
   }
 
   findOne(userId: number): Promise<User> {
-    return this.userRepository.findOne({ where: {id: userId }})
+    return this.userRepository.findOne({ where: { id: userId } });
   }
-  
+
   findOneByUsername(username: string): Promise<User> {
-    return this.userRepository.findOne({ where: { username }})
+    return this.userRepository.findOne({ where: { username } });
   }
 }

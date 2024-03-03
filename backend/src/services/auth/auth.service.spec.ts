@@ -18,42 +18,52 @@ describe('AuthService', () => {
   beforeAll(async () => {
     moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(typeOrmConfig), TypeOrmModule.forFeature([
-          User, List, Todo
-        ]),
+        TypeOrmModule.forRoot(typeOrmConfig),
+        TypeOrmModule.forFeature([User, List, Todo]),
         JwtModule.register({
-          secret: 'test'
-        })
+          secret: 'test',
+        }),
       ],
       providers: [AuthService, UserService],
     }).compile();
 
     service = moduleRef.get<AuthService>(AuthService);
     repository = moduleRef.get<Repository<User>>(getRepositoryToken(User));
-    const todoRepository = moduleRef.get<Repository<Todo>>(getRepositoryToken(Todo));
-    const listRepository = moduleRef.get<Repository<List>>(getRepositoryToken(List));
+    const todoRepository = moduleRef.get<Repository<Todo>>(
+      getRepositoryToken(Todo),
+    );
+    const listRepository = moduleRef.get<Repository<List>>(
+      getRepositoryToken(List),
+    );
     await todoRepository.query('DELETE FROM public.todo');
     await listRepository.query('DELETE FROM public.list');
     await repository.query('DELETE FROM public.user');
   });
 
   afterAll(() => {
-    moduleRef.close()
+    moduleRef.close();
   });
 
   describe('signIn', () => {
     it('should return access token when the user name and password matches', async () => {
-      const user1 = await repository.save({username: 'user-test-1', password: 'pass'});
+      await repository.save({
+        username: 'user-test-1',
+        password: 'pass',
+      });
       const expectedResponse = await service.signIn('user-test-1', 'pass');
       expect(expectedResponse.access_token).toBeTruthy();
     });
 
     it('should throw an error when user does not exist', async () => {
-      await expect(service.signIn('invalid', 'invalid')).rejects.toThrow(UnauthorizedException);
+      await expect(service.signIn('invalid', 'invalid')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should throw an error when the user password does not match', async () => {
-      await expect(service.signIn('user1', 'invalid')).rejects.toThrow(UnauthorizedException);
+      await expect(service.signIn('user1', 'invalid')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
-  })
+  });
 });
