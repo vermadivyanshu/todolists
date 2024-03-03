@@ -13,7 +13,10 @@ export class TodoService {
   ) {}
 
   createList(userId: number, list: Partial<List>): Promise<List> {
-    const listToCreate = {...list, user: {id: userId}};
+    if(!list.name || !list.name.trim().length) {
+      throw new BadRequestException('name cannot be null or empty string');
+    }
+    const listToCreate = { name: list.name.trim(), user: {id: userId}};
     return this.listRepository.save(listToCreate);
   }
   
@@ -47,8 +50,11 @@ export class TodoService {
   }
 
   async createTodo(userId: number, listId: number, todo: Partial<Todo>): Promise<Todo> {
+    if(!todo.title?.trim().length || (todo.detail && !todo.detail.trim().length)) {
+      throw new BadRequestException('title or detail cannot be null');
+    }
     await this.findListByUserIdAndListId(userId, listId);
-    return this.todoRepository.save({...todo, list: { id: listId }});
+    return this.todoRepository.save({title: todo.title.trim(), detail: todo.detail?.trim(), list: { id: listId }});
   }
 
   async findOneTodo(userId: number, listId: number, todoId: number): Promise<Todo> {
@@ -64,14 +70,17 @@ export class TodoService {
   }
 
   async updateTodo(userId: number, listId: number, todo: Partial<Todo>): Promise<Todo> {
+    if(!todo.title?.trim().length || (todo.detail && !todo.detail.trim().length)) {
+      throw new BadRequestException('title or detail cannot be null');
+    }
     const todoToUpdate = await this.findOneTodo(userId, listId, todo.id);
-    await this.todoRepository.update({id: todoToUpdate.id}, { title: todo.title, detail: todo.detail, isDone: todo.isDone });
+    await this.todoRepository.update({id: todoToUpdate.id}, { title: todo.title.trim(), detail: todo.detail.trim(), isDone: todo.isDone });
     return this.todoRepository.findOne({ where: { id: todoToUpdate.id }})
   }
 
   async deleteTodo(userId: number, listId: number, todoId: number): Promise<Todo> {
     const todo = await this.findOneTodo(userId, listId, todoId);
-    this.todoRepository.delete({ id: todo.id })
+    await this.todoRepository.delete({ id: todo.id })
     return todo;
   }
 

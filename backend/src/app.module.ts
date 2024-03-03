@@ -6,20 +6,15 @@ import { ListModule } from './list/list.module';
 import { TodoModule } from './todo/todo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { typeOrmConfig } from './typeorm.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: 'postgres://postgres:admin@localhost:5432/todos_dev',
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     ListModule,
     TodoModule,
-    AuthModule,
-    
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
