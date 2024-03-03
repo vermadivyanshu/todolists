@@ -3,3 +3,10 @@ export interface TodoDto {
   readonly title: string;
   readonly detail: string;
 }
+
+export interface UpdateTodoDto {
+  listId: number;
+  isDone: boolean;
+  title: string;
+  detail: string;
+}

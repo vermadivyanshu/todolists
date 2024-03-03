@@ -9,6 +9,7 @@ export class AuthService {
 
   async signIn(username: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.userService.findOneByUsername(username);
+    // should be encrypted using bcrypt.
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }

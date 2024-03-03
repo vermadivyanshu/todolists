@@ -84,6 +84,4 @@ export class TodoService {
     return todo;
   }
 
-
-
 }

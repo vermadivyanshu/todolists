@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Param, Post, Put, Request, UseGuards } from '
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TodoService } from 'src/services/todo/todo.service';
 import { Todo } from 'src/todo/todo.entity';
-import { TodoDto } from './todo.dto';
+import { TodoDto, UpdateTodoDto } from './todo.dto';
 
 @UseGuards(AuthGuard)
 @Controller('todos')
@@ -16,7 +16,7 @@ export class TodoController {
   }
 
   @Put(':id')
-  async updateTodo(@Request() request, @Param('id')id: number, @Body()todo: TodoDto & Partial<Todo>): Promise<Todo> {
+  async updateTodo(@Request() request, @Param('id')id: number, @Body()todo: UpdateTodoDto): Promise<Todo> {
     const {listId, ...restOfTodo } = todo; 
     return this.todoService.updateTodo(request.user.userId, listId, {
       id, ...restOfTodo

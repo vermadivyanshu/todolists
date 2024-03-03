@@ -30,35 +30,27 @@ describe('UserService', () => {
 
     service = moduleRef.get<UserService>(UserService);
     repository = moduleRef.get<Repository<User>>(getRepositoryToken(User));
+    await repository.query("DELETE FROM public.user");
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     moduleRef.close();
   });
 
-  afterEach(async () => {
-    await repository.query("DELETE FROM public.user");
-  })
-
   describe('create', () => {
     it('should create user', async () => {
-      await service.create({username: 'test', password: 'test' })
-      let [entities, count] = await repository.findAndCount();
+      await service.create({username: 'test123', password: 'test' })
+      let [entities, count] = await repository.findAndCountBy({username: 'test123'});
       expect(count).toBe(1);
-      expect(entities[0].username).toBe('test');
+      expect(entities[0].username).toBe('test123');
       expect(entities[0].password).toBe('test');
     })
   })
 
   describe('findOne', () => {
-    let userRecord: User | undefined;
-    
-    beforeAll(async () => {
-      const user: User = {username: 'test1', password: 'test'} as User;
-      userRecord = await repository.save(user);
-    });
-
     it('should return record when id is valid', async () => {
+      const user: User = {username: 'test1', password: 'test'} as User;
+      const userRecord = await repository.save(user);
       const expectedResponse =  await service.findOne(userRecord.id);
       expect(expectedResponse).toEqual(userRecord);
     });
@@ -70,15 +62,9 @@ describe('UserService', () => {
   })
 
   describe('findOneByUsername', () => {
-    let userRecord: User | undefined;
-
-    beforeAll(async () => {
-      const user: User = {username: 'test2', password: 'test'} as User;
-      userRecord = await repository.save(user);
-    });
-
-    
     it('should return record when username is valid', async () => {
+      const user: User = {username: 'test2', password: 'test'} as User;
+      const userRecord = await repository.save(user);
       const expectedResponse =  await service.findOneByUsername('test2');
       expect(expectedResponse).toEqual(userRecord);
     });
