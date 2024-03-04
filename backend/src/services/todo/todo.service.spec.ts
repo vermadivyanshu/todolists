@@ -186,9 +186,16 @@ describe('TodoService', () => {
         name: 'list',
         user: { id: user.id },
       });
+      const todo = await todoRepository.save({
+        title: 'todo',
+        detail: 'detail',
+        list: { id: list.id}
+      })
       await service.deleteListByUserIdAndListId(user.id, list.id);
       const count = await listRepository.count();
+      const todoCount = await todoRepository.count();
       expect(count).toBe(0);
+      expect(todoCount).toBe(0);
     });
 
     it('should throw an error when list is not found', async () => {

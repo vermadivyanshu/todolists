@@ -64,6 +64,7 @@ export class TodoService {
     listId: number,
   ): Promise<List> {
     const list = await this.findListByUserIdAndListId(userId, listId);
+    await this.todoRepository.delete({list: { id: listId }});
     await this.listRepository.delete({ id: listId });
     return list;
   }
