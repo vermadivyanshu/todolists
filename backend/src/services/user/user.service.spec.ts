@@ -32,7 +32,7 @@ describe('UserService', () => {
 
     service = moduleRef.get<UserService>(UserService);
     repository = moduleRef.get<Repository<User>>(getRepositoryToken(User));
-    await repository.query('DELETE FROM public.user');
+    await repository.query('TRUNCATE TABLE public.user CASCADE');
   });
 
   afterAll(() => {

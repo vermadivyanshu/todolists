@@ -30,9 +30,9 @@ describe('TodoService', () => {
   });
 
   beforeEach(async () => {
-    await todoRepository.query('DELETE FROM public.todo');
-    await listRepository.query('DELETE FROM public.list');
-    await userRepository.query('DELETE FROM public.user');
+    await todoRepository.query('TRUNCATE TABLE public.todo CASCADE');
+    await listRepository.query('TRUNCATE TABLE public.list CASCADE');
+    await userRepository.query('TRUNCATE TABLE public.user CASCADE');
   });
 
   afterAll(() => {
@@ -192,14 +192,13 @@ describe('TodoService', () => {
     });
 
     it('should throw an error when list is not found', async () => {
-      const user = await userRepository.save({
+      const [user, user2] = await userRepository.save([{
         username: 'test78',
         password: 'user',
-      });
-      const user2 = await userRepository.save({
+      },{
         username: 'test62',
         password: 'user',
-      });
+      } ]);
       const list = await listRepository.save({
         name: 'list',
         user: { id: user2.id },

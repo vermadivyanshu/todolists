@@ -63,7 +63,7 @@ export class TodoService {
     userId: number,
     listId: number,
   ): Promise<List> {
-    const list = this.findListByUserIdAndListId(userId, listId);
+    const list = await this.findListByUserIdAndListId(userId, listId);
     await this.listRepository.delete({ id: listId });
     return list;
   }

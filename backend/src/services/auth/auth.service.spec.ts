@@ -35,9 +35,9 @@ describe('AuthService', () => {
     const listRepository = moduleRef.get<Repository<List>>(
       getRepositoryToken(List),
     );
-    await todoRepository.query('DELETE FROM public.todo');
-    await listRepository.query('DELETE FROM public.list');
-    await repository.query('DELETE FROM public.user');
+    await todoRepository.query('TRUNCATE TABLE public.todo CASCADE');
+    await listRepository.query('TRUNCATE TABLE public.list CASCADE');
+    await repository.query('TRUNCATE TABLE public.user CASCADE');
   });
 
   afterAll(() => {
@@ -61,7 +61,7 @@ describe('AuthService', () => {
     });
 
     it('should throw an error when the user password does not match', async () => {
-      await expect(service.signIn('user1', 'invalid')).rejects.toThrow(
+      await expect(service.signIn('user-test-1', 'invalid')).rejects.toThrow(
         UnauthorizedException,
       );
     });
