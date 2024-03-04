@@ -1,4 +1,9 @@
 <mat-toolbar color="primary">
   <span>Todo Lists</span>
+  <span class="spacer"></span>
+  <button mat-button (click)="onClickLogout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
 </mat-toolbar>
 <router-outlet />
