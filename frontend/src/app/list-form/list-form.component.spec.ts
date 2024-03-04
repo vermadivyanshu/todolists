@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import { By } from '@angular/platform-browser';
 
 describe('ListFormComponent', () => {
   let component: ListFormComponent;
@@ -58,12 +59,24 @@ describe('ListFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should have correct title', () => {
+    const [title] = fixture.debugElement.queryAll(By.css('h2'));
+    expect(title.nativeElement.textContent).toEqual('Test Title');
+  })
+
   it('should initialize form with provided data', () => {
     expect(component.listForm.value.name).toBe('Test Name');
   });
 
   it('should close dialog on cancel click', () => {
-    component.onCancelClick();
+    const [btn] = fixture.debugElement.queryAll(By.css('button'));
+    btn.nativeElement.click();
+    expect(matDialogRefSpy.close).toHaveBeenCalled();
+  });
+
+  it('should close dialog on cancel click', () => {
+    const [btn] = fixture.debugElement.queryAll(By.css('button'));
+    btn.nativeElement.click();
     expect(matDialogRefSpy.close).toHaveBeenCalled();
   });
 
