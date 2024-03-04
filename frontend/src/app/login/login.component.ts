@@ -26,6 +26,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loginForm.get('username')?.valueChanges.subscribe(value => {
+      this.loginForm.get('username')?.patchValue(value?.trim(), { emitEvent: false });
+    });
 
   }
 

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'
 import { TodoService } from '../services/todo.service';
 import { List, ListWithTodos, Todo } from '../services/todo.types';
 import { tap } from 'rxjs';
@@ -27,9 +26,7 @@ export class ListComponent implements OnChanges {
   selectedTodos: Todo[];
 
   constructor(private todoService: TodoService,
-    private route: ActivatedRoute,
-    public dialog: MatDialog,
-    private router: Router) {
+    public dialog: MatDialog) {
     this.list = {};
     this.selectedTodos = [];
   }

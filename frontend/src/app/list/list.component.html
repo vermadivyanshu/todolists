@@ -14,7 +14,7 @@
   </div>
 
 </div>
-<div class="list-actions-container">
+<div class="todo-actions-container">
   <button mat-button color="primary" [disabled]="!selectedTodos.length" (click)="onClickToggle()">
     Toggle
   </button>
@@ -37,9 +37,9 @@
 </div>
 
 <div *ngIf="list.todos && list.todos.length">
-  <mat-selection-list #todos [multiple]="false" (selectionChange)="onSelectionChange($event)">
+  <mat-selection-list id="todo-list" [multiple]="false" (selectionChange)="onSelectionChange($event)">
     <ng-container *ngFor="let todo of list.todos">
-      <mat-list-option [value]="todo">
+      <mat-list-option [value]="todo" class="todo-list-item">
         <span matListItemTitle [ngClass]="{'strikethrough': todo.isDone }">{{todo.title}}</span>
         <span matListItemLine>{{todo.detail}}</span>
       </mat-list-option>

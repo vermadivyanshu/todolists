@@ -36,10 +36,8 @@ describe('LoginComponent', () => {
 
   it('should have input elements', () => {
     const inputElements = fixture.debugElement.queryAll(By.css('input'));
-    console.log(inputElements.length);
     expect(inputElements.length).toEqual(2);
     const buttons = fixture.debugElement.queryAll(By.css('button'));
-    console.log(buttons.length);
     expect(buttons.length).toEqual(1);
   });
 

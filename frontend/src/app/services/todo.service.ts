@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { List, ListDto, ListWithTodos, Todo, TodoDto } from './todo.types';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 import { LocalstorageService } from './localstorage.service';
 
 @Injectable({
@@ -17,7 +17,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   getList(listId: number): Observable<ListWithTodos | undefined> {
@@ -26,7 +28,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   createList(list: ListDto): Observable<List | undefined> {
@@ -35,7 +39,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   updateList(id: number, list: ListDto): Observable<List | undefined> {
@@ -44,7 +50,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   deleteList(id: number): Observable<any> {
@@ -53,7 +61,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   createTodo(todo: TodoDto): Observable<Todo | undefined>  {
@@ -62,7 +72,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   updateTodo(id: number, todo: TodoDto & Partial<Todo>): Observable<Todo | undefined> {
@@ -71,7 +83,9 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
   }
 
   deleteTodo(id: number, listId: number): Observable<any> {
@@ -80,6 +94,18 @@ export class TodoService {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    })
+    }).pipe(
+      catchError(this.errorHandler)
+    );
+  }
+
+  private errorHandler(error: HttpErrorResponse) {
+    if(error.status === 0) {
+      console.log('failed on client', error);
+    } else {
+      console.log('failed on server', error);
+    }
+    return throwError(() => error)
+
   }
 }

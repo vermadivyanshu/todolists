@@ -22,12 +22,12 @@ export interface ListDto {
 
 export interface TodoDto {
   title: string;
-  name: string;
+  detail: string;
   listId: number;
 }
 export interface Todo {
   id: number;
   title: string;
-  name: string;
+  detail: string;
   isDone: boolean;
 }
