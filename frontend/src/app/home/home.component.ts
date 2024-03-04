@@ -41,14 +41,6 @@ export class HomeComponent implements OnInit {
     ).subscribe();
   }
 
-  onClick() {
-    this.todoService.getAllList().pipe(
-      tap(lists => {
-        this.lists = lists;
-      })
-    ).subscribe();
-  }
-
   onListItemClick(list: List) {
     this.selectedListId = list.id;
   }

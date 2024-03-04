@@ -1,5 +1,4 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import { LoginRoutingModule } from './login-routing.module';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -11,7 +10,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginRoutingModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, ReactiveFormsModule],
+  imports: [MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

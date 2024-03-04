@@ -55,6 +55,4 @@ export class ListFormComponent {
   onCancelClick(): void {
     this.dialogRef.close();
   }
-
-
 }

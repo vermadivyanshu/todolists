@@ -1,9 +1,9 @@
 <mat-drawer-container class="home-container">
   <mat-drawer mode="side" opened class="home-drawer">
     <mat-list>
-      <div mat-subheader>Lists</div>
+      <div mat-subheader class="heading">Lists</div>
       <mat-list-item *ngFor="let list of lists">
-        <button mat-button (click)="onListItemClick(list)" >
+        <button mat-button class="home-list-item-btn" (click)="onListItemClick(list)" >
           <mat-icon>checklist</mat-icon>{{ list.name }}
         </button>
       </mat-list-item>
